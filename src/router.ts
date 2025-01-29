@@ -1,5 +1,12 @@
 import { Router } from "express";
-import { createProduct, getProducts, getProductById } from "./handlers/product";
+import {
+  createProduct,
+  getProducts,
+  getProductById,
+  updateProduct,
+  updateAvailability,
+  deleteProduct,
+} from "./handlers/product";
 import { body, param } from "express-validator";
 import { handleInputErrors } from "./middleware";
 
@@ -28,15 +35,36 @@ router.post(
   createProduct
 );
 
-router.put("/", (req, res) => {
-  res.json("Desde put");
-});
+router.put(
+  "/:id",
+  param("id").isInt().withMessage("ID not valid"),
+  body("name").notEmpty().withMessage("Cant be empty"),
+  body("price")
+    .isNumeric()
+    .withMessage("Not a valid format")
+    .notEmpty()
+    .withMessage("Cant be empty")
+    .custom(value => value > 0)
+    .withMessage("cant be lower than 0"),
+  body("availability")
+    .isBoolean()
+    .withMessage("Availability can only be set to true or false"),
+  handleInputErrors,
+  updateProduct
+);
 
-router.patch("/", (req, res) => {
-  res.json("Desde patch");
-});
+router.patch(
+  "/:id",
+  param("id").isInt().withMessage("ID not valid"),
+  param("id").isInt().withMessage("ID not valid"),
+  handleInputErrors,
+  updateAvailability
+);
 
-router.delete("/", (req, res) => {
-  res.json("Desde delete");
-});
+router.delete(
+  "/:id",
+  param("id").isInt().withMessage("ID not valid"),
+  handleInputErrors,
+  deleteProduct
+);
 export default router;
