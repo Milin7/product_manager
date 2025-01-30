@@ -7,7 +7,7 @@ async function connectDB() {
   try {
     await sequelize.authenticate();
     sequelize.sync();
-    console.log("Connection has been established successfully.");
+    // console.log("Connection has been established successfully.");
   } catch (error) {
     console.log(`Unable to connect to the database`, error);
   }
@@ -20,4 +20,9 @@ const server = express();
 server.use(express.json());
 //Express routes
 server.use("/api/products", router);
+
+//Tests
+server.get("/api", (req, res) => {
+  res.json({ msg: "Desde API" });
+});
 export default server;

@@ -7,7 +7,7 @@ export const createProduct = async (
 ): Promise<void> => {
   try {
     const product = await Product.create(req.body);
-    res.json({ data: product });
+    res.status(201).json({ data: product });
   } catch (error) {
     console.log("Couldn't create product", error);
   }
