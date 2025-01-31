@@ -1,4 +1,6 @@
 import express from "express";
+import swaggerUI from "swagger-ui-express";
+import swaggerSpec, { swaggerUiOptions } from "./config/swagger";
 import router from "./router";
 import sequelize from "./config/db";
 
@@ -21,8 +23,11 @@ server.use(express.json());
 //Express routes
 server.use("/api/products", router);
 
-//Tests
-server.get("/api", (req, res) => {
-  res.json({ msg: "Desde API" });
-});
+//Docs
+server.use(
+  "/docs",
+  swaggerUI.serve,
+  swaggerUI.setup(swaggerSpec, swaggerUiOptions)
+);
+
 export default server;
