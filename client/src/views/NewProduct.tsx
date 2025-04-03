@@ -1,7 +1,13 @@
-import { Link, Form, useActionData } from "react-router-dom";
+import {
+  Link,
+  Form,
+  useActionData,
+  ActionFunctionArgs,
+} from "react-router-dom";
 import ErrorMessage from "../components/ErrorMessage";
+import { addProduct } from "../services/ProductService";
 
-export async function action({ request }) {
+export async function action({ request }: ActionFunctionArgs) {
   const data = Object.fromEntries(await request.formData());
   let error = "";
   if (Object.values(data).includes("")) {
@@ -10,10 +16,12 @@ export async function action({ request }) {
   if (error.length) {
     return error;
   }
+
+  addProduct(data);
+  return {};
 }
 export default function NewProduct() {
-  const error = useActionData();
-  console.log(error);
+  const error = useActionData() as string;
   return (
     <>
       <div className=" flex justify-start">
