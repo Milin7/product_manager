@@ -14,7 +14,7 @@ export const getProducts = async (
   res: Response
 ): Promise<void> => {
   const products = await Product.findAll({
-    attributes: { exclude: ["createdAt", "updatedAt", "availability"] },
+    attributes: { exclude: ["createdAt", "updatedAt"] },
   });
   res.json({ data: products });
 };
