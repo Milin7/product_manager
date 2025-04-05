@@ -4,9 +4,11 @@ import {
   useActionData,
   ActionFunctionArgs,
   redirect,
+  useLocation,
 } from "react-router-dom";
 import ErrorMessage from "../components/ErrorMessage";
 import { addProduct } from "../services/ProductService";
+import { formatCurrency } from "../utils";
 
 export async function action({ request }: ActionFunctionArgs) {
   const data = Object.fromEntries(await request.formData());
@@ -22,8 +24,11 @@ export async function action({ request }: ActionFunctionArgs) {
 
   return redirect("/");
 }
-export default function NewProduct() {
+export default function EditProduct() {
   const error = useActionData() as string;
+  const { state } = useLocation();
+
+  console.log(state.product);
   return (
     <>
       <div className=" flex justify-start">
@@ -38,7 +43,7 @@ export default function NewProduct() {
 
       <div className=" flex justify-center mt-7 ">
         <h2 className=" text-center  text-3xl text-project-blue font-medium ">
-          You haven't added any products
+          Edit product
         </h2>
       </div>
 
@@ -57,6 +62,7 @@ export default function NewProduct() {
               className="text-center my-2 block w-96 py-2 px-7 bg-project-clear rounded-full"
               placeholder="What's the name of your product?"
               name="name"
+              defaultValue={state.product.name}
             />
           </div>
           <div className="flex flex-col items-center mb-4">
@@ -72,6 +78,7 @@ export default function NewProduct() {
               className="text-center my-2 block w-96 py-2 px-7 bg-project-clear rounded-full"
               placeholder="What's your product's price?"
               name="price"
+              defaultValue={state.product.price}
             />
           </div>
         </div>
@@ -80,7 +87,7 @@ export default function NewProduct() {
           <input
             type="submit"
             className=" rounded-full bg-project-blue text-sm font-semibold hover:opacity-90 text-white shadow-md py-2 hover:cursor-pointer px-5"
-            value="Registrar Producto"
+            value="Save changes"
           />{" "}
         </div>
       </Form>

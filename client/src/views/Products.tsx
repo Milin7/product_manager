@@ -24,9 +24,9 @@ export default function Products() {
       </div>
 
       <div className=" ">
-        <table className="w-full mt-5 rounded-full">
-          <thead className=" bg-project-blue text-sm  text-white   ">
-            <tr className=" rounded-full">
+        <table className=" w-full mt-5 rounded-full ">
+          <thead className=" bg-project-blue text-sm text-white   ">
+            <tr className="">
               <th className="py-2 rounded-l-full  font-semibold">Producto</th>
               <th className="py-2 font-semibold">Precio</th>
               <th className="py-2 font-semibold">Disponibilidad</th>
