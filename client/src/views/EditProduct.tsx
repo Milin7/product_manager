@@ -4,11 +4,22 @@ import {
   useActionData,
   ActionFunctionArgs,
   redirect,
-  useLocation,
+  LoaderFunctionArgs,
+  useLoaderData,
 } from "react-router-dom";
 import ErrorMessage from "../components/ErrorMessage";
-import { addProduct } from "../services/ProductService";
-import { formatCurrency } from "../utils";
+import { addProduct, getProductById } from "../services/ProductService";
+import { Product } from "../types";
+
+export async function loader({ params }: LoaderFunctionArgs) {
+  if (params.id !== undefined) {
+    const product = await getProductById(+params.id);
+    if (!product) {
+      redirect("/");
+    }
+    return product;
+  }
+}
 
 export async function action({ request }: ActionFunctionArgs) {
   const data = Object.fromEntries(await request.formData());
@@ -25,10 +36,8 @@ export async function action({ request }: ActionFunctionArgs) {
   return redirect("/");
 }
 export default function EditProduct() {
+  const product = useLoaderData() as Product;
   const error = useActionData() as string;
-  const { state } = useLocation();
-
-  console.log(state.product);
   return (
     <>
       <div className=" flex justify-start">
@@ -62,7 +71,7 @@ export default function EditProduct() {
               className="text-center my-2 block w-96 py-2 px-7 bg-project-clear rounded-full"
               placeholder="What's the name of your product?"
               name="name"
-              defaultValue={state.product.name}
+              defaultValue={product.name}
             />
           </div>
           <div className="flex flex-col items-center mb-4">
@@ -78,7 +87,7 @@ export default function EditProduct() {
               className="text-center my-2 block w-96 py-2 px-7 bg-project-clear rounded-full"
               placeholder="What's your product's price?"
               name="price"
-              defaultValue={state.product.price}
+              defaultValue={product.price}
             />
           </div>
         </div>
