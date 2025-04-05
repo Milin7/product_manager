@@ -8,8 +8,13 @@ import {
   useLoaderData,
 } from "react-router-dom";
 import ErrorMessage from "../components/ErrorMessage";
-import { addProduct, getProductById } from "../services/ProductService";
-import { Product } from "../types";
+import { getProductById, updateProduct } from "../services/ProductService";
+import ProductForm from "../components/ProductForm";
+
+const availabilityOptions = [
+  { name: "Available", value: true },
+  { name: "Not available", value: false },
+];
 
 export async function loader({ params }: LoaderFunctionArgs) {
   if (params.id !== undefined) {
@@ -21,7 +26,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
   }
 }
 
-export async function action({ request }: ActionFunctionArgs) {
+export async function action({ request, params }: ActionFunctionArgs) {
   const data = Object.fromEntries(await request.formData());
   let error = "";
   if (Object.values(data).includes("")) {
@@ -31,12 +36,13 @@ export async function action({ request }: ActionFunctionArgs) {
     return error;
   }
 
-  await addProduct(data);
-
-  return redirect("/");
+  if (params.id !== undefined) {
+    await updateProduct(data, +params.id);
+    return redirect("/");
+  }
 }
 export default function EditProduct() {
-  const product = useLoaderData() as Product;
+  const product = useLoaderData();
   const error = useActionData() as string;
   return (
     <>
@@ -58,40 +64,34 @@ export default function EditProduct() {
 
       <Form className="mt-10" method="POST">
         <div className=" gap-20">
+          <ProductForm product={product} />
           <div className="flex flex-col items-center mb-4">
             <label
-              className="text-project-blue font-medium text-xl text-center "
-              htmlFor="name"
+              className="text-project-blue font-medium text-xl text-center  "
+              htmlFor="availability"
             >
-              Product name
+              Availability:
             </label>
-            <input
-              id="name"
-              type="text"
+            <select
+              id="availability"
               className="text-center my-2 block w-96 py-2 px-7 bg-project-clear rounded-full"
-              placeholder="What's the name of your product?"
-              name="name"
-              defaultValue={product.name}
-            />
-          </div>
-          <div className="flex flex-col items-center mb-4">
-            <label
-              className="text-project-blue font-medium text-xl"
-              htmlFor="price"
+              name="availability"
+              defaultValue={product?.availability.toString()}
             >
-              Price:
-            </label>
-            <input
-              id="price"
-              type="number"
-              className="text-center my-2 block w-96 py-2 px-7 bg-project-clear rounded-full"
-              placeholder="What's your product's price?"
-              name="price"
-              defaultValue={product.price}
-            />
+              {availabilityOptions.map((option) => (
+                <option
+                  className=""
+                  id="option"
+                  key={option.name}
+                  value={option.value.toString()}
+                >
+                  {option.name}
+                </option>
+              ))}
+            </select>
           </div>
+          {error && <ErrorMessage>{error}</ErrorMessage>}{" "}
         </div>
-        {error && <ErrorMessage>{error}</ErrorMessage>}{" "}
         <div className=" flex justify-center">
           <input
             type="submit"
