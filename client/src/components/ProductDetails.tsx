@@ -2,6 +2,7 @@ import {
   ActionFunctionArgs,
   Form,
   redirect,
+  useFetcher,
   useNavigate,
 } from "react-router-dom";
 import { Product } from "../types";
@@ -20,8 +21,10 @@ export async function action({ params }: ActionFunctionArgs) {
 }
 
 export function ProductDetails({ product }: ProductDetailsProps) {
+  const fetcher = useFetcher();
   const navigate = useNavigate();
   const isAvailable = product.availability;
+
   return (
     <>
       <tr className="border-b-2  text-center border-project-grey  ">
@@ -32,7 +35,20 @@ export function ProductDetails({ product }: ProductDetailsProps) {
           {formatCurrency(product.price)}
         </td>
         <td className="p-3 text-lg text-project-grey font-medium">
-          {isAvailable ? "Available" : "Not available"}
+          <fetcher.Form method="POST">
+            <button
+              type="submit"
+              name="id"
+              value={product.id}
+              className={`${
+                isAvailable
+                  ? "rounded-full  bg-project-blue text-sm font-semibold hover:opacity-90 text-white shadow-md py-2 px-5"
+                  : "rounded-full  bg-project-danger text-sm font-semibold hover:opacity-90 text-white shadow-md py-2 px-5"
+              } hover:cursor-pointer`}
+            >
+              {isAvailable ? "Available" : "Not available"}
+            </button>
+          </fetcher.Form>
         </td>
         <td className="p-3 text-l  flex  gap-2  text-project-grey font-medium ">
           <div className=" w-full ">
