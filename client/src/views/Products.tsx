@@ -13,13 +13,14 @@ export default function Products() {
 
   return (
     <>
-      <div className="flex justify-between">
-        <h2 className="ml-9  text-2xl  float-start text-center  w-fit   text-project-blue font-semibold ">
+      <div className="flex justify-evenly items-center content-center text-center">
+        <div className="flex-1/3"></div>
+        <h2 className="ml-9 flex-1/3 text-2xl  float-start text-center  w-fit   text-project-blue font-semibold ">
           Products
         </h2>
         <Link
           to="new/product"
-          className=" rounded-full float-end bg-project-blue self-center text-sm font-semibold hover:opacity-90 text-white shadow-md py-2 px-5"
+          className=" flex-1/3 w-40 rounded-full  bg-project-blue self-center text-sm font-semibold hover:opacity-90 text-white shadow-md py-2 px-5"
         >
           Add Product
         </Link>
