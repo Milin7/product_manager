@@ -28,11 +28,11 @@ export default function NewProduct() {
   const error = useActionData() as string;
   return (
     <>
-      <div className=" flex justify-start">
+      <div className=" flex justify-end">
         {" "}
         <Link
           to="/"
-          className=" rounded-full bg-project-blue text-sm font-semibold hover:opacity-90 text-white shadow-md py-2 px-5"
+          className=" rounded-full  bg-project-blue text-sm font-semibold hover:opacity-90 text-white shadow-md py-2 px-5"
         >
           Go back to products
         </Link>

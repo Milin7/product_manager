@@ -19,7 +19,7 @@ export default function Products() {
         </h2>
         <Link
           to="new/product"
-          className=" rounded-full float-end bg-project-blue self-center text-sm font-semibold hover:opacity-90 text-white shadow-md p-2"
+          className=" rounded-full float-end bg-project-blue self-center text-sm font-semibold hover:opacity-90 text-white shadow-md py-2 px-5"
         >
           Add Product
         </Link>
