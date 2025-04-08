@@ -23,6 +23,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
   return redirect("/");
 }
+
 export default function NewProduct() {
   const error = useActionData() as string;
   return (
@@ -44,7 +45,8 @@ export default function NewProduct() {
       </div>
 
       <Form className="mt-10" method="POST">
-        {error && <ErrorMessage>{error}</ErrorMessage>} <ProductForm />
+        <ProductForm />
+        {error && <ErrorMessage>{error}</ErrorMessage>}
         <div className=" flex justify-center">
           <input
             type="submit"

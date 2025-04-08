@@ -1,10 +1,23 @@
-import { useNavigate } from "react-router-dom";
+import {
+  ActionFunctionArgs,
+  Form,
+  redirect,
+  useNavigate,
+} from "react-router-dom";
 import { Product } from "../types";
 import { formatCurrency } from "../utils";
+import { deleteProduct } from "../services/ProductService";
 
 type ProductDetailsProps = {
   product: Product;
 };
+
+export async function action({ params }: ActionFunctionArgs) {
+  if (params.id !== undefined) {
+    await deleteProduct(+params.id);
+    return redirect("/");
+  }
+}
 
 export function ProductDetails({ product }: ProductDetailsProps) {
   const navigate = useNavigate();
@@ -21,13 +34,13 @@ export function ProductDetails({ product }: ProductDetailsProps) {
         <td className="p-3 text-lg text-project-grey font-medium">
           {isAvailable ? "Available" : "Not available"}
         </td>
-        <td className="p-3 text-lg text-project-grey font-medium ">
-          <div className=" flex gap-2 items-center">
+        <td className="p-3 text-l  flex  gap-2  text-project-grey font-medium ">
+          <div className=" w-full ">
             <button
               onClick={() => navigate(`products/${product.id}/edit`)}
-              className="rounded-full  text-xs font-medium hover:bg-project-clear-grey border-project-grey border-2  py-1 hover:cursor-pointer px-3"
+              className="rounded-full w-full  text-xs font-medium hover:bg-project-clear-grey border-project-grey border-2  py-1 hover:cursor-pointer px-3"
             >
-              <div className="flex gap-1">
+              <div className="flex justify-center gap-1">
                 <svg
                   width="16"
                   height="16"
@@ -48,6 +61,22 @@ export function ProductDetails({ product }: ProductDetailsProps) {
               </div>
             </button>
           </div>
+          <Form
+            className="w-full "
+            method="POST"
+            action={`products/${product.id}/delete`}
+            onSubmit={(e) => {
+              if (!confirm("Are you sure you want to delete this product?")) {
+                e.preventDefault();
+              }
+            }}
+          >
+            <input
+              type="submit"
+              value="Delete"
+              className=" rounded-full uppercase  text-xs font-medium hover:bg-project-danger border-project-grey bg-project-blue text-white border-2 hover:border-project-danger w-full py-1 hover:cursor-pointer px-3"
+            />
+          </Form>
         </td>
       </tr>
     </>
