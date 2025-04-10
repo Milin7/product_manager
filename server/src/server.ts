@@ -23,16 +23,14 @@ const server = express();
 
 // Allow connections
 const corsOptions: CorsOptions = {
-  origin: function (origin, callback) {
-    if (
-      origin === process.env.FRONTEND_URL ||
-      "http://localhost:4000/api/products"
-    ) {
+  origin: function(origin, callback) {
+    if (origin === process.env.FRONTEND_URL) {
       callback(null, true);
     } else {
-      callback(new Error("CORS Error"));
+      callback(new Error("Error de CORS"));
     }
   },
+  allowedHeaders: ["Content-Type", "Authorization"], 
 };
 server.use(cors(corsOptions));
 

@@ -1,18 +1,12 @@
 import { Request, Response } from "express";
 import Product from "../models/Product.model";
 
-export const createProduct = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
+export const createProduct = async (req: Request, res: Response) => {
   const product = await Product.create(req.body);
   res.status(201).json({ data: product });
 };
 
-export const getProducts = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
+export const getProducts = async (req: Request, res: Response) => {
   const products = await Product.findAll({
     order: [["id", "DESC"]],
     attributes: { exclude: ["createdAt", "updatedAt"] },
@@ -20,10 +14,7 @@ export const getProducts = async (
   res.json({ data: products });
 };
 
-export const getProductById = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
+export const getProductById = async (req: Request, res: Response) => {
   const { id } = req.params;
   const product = await Product.findByPk(id);
 

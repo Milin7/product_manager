@@ -33,15 +33,10 @@ export default function Products() {
           Add Product
         </Link>
       </div>
-      {products.length === 0 ? (
-        <h1 className="text-xl text-center m-10   text-project-blue">
-          You don't have any products
-        </h1>
-      ) : (
-        <div className="flex-col">
-          <ProductTable products={products} />
-        </div>
-      )}
+
+      <div className="flex-col">
+        <ProductTable products={products} />
+      </div>
     </>
   );
 }
