@@ -9,7 +9,7 @@ export default function ProductTable({ products }: ProductTableProps) {
   return (
     <div className="flex-col">
       <div className=" ">
-        <table className=" w-full mt-5 rounded-full ">
+        <table className=" w-full mt-5 table-fixed rounded-full ">
           <thead className=" bg-project-blue text-sm text-white   ">
             <tr className="">
               <th className="py-2 rounded-l-full  font-semibold">Product</th>

@@ -18,7 +18,6 @@ export async function action({ request }: ActionFunctionArgs) {
 
 export default function Products() {
   const products = useLoaderData() as Product[];
-
   return (
     <>
       <div className="grid grid-cols-3 items-center content-center text-center">
@@ -33,10 +32,15 @@ export default function Products() {
           Add Product
         </Link>
       </div>
-
-      <div className="flex-col">
-        <ProductTable products={products} />
-      </div>
+      {products.length === 0 ? (
+        <div className=" flex my-5 font-semibold text-project-grey justify-center">
+          You don't have any products
+        </div>
+      ) : (
+        <div className="flex-col">
+          <ProductTable products={products} />
+        </div>
+      )}
     </>
   );
 }
