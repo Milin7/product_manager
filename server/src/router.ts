@@ -89,7 +89,7 @@ router.get(
   "/:id",
   param("id").isInt().withMessage("ID not valid"),
   handleInputErrors,
-  getProductById
+  getProductById,
 );
 
 /**
@@ -132,10 +132,10 @@ router.post(
     .withMessage("Not a valid format")
     .notEmpty()
     .withMessage("Cant be empty")
-    .custom(value => value > 0)
+    .custom((value) => value > 0)
     .withMessage("cant be lower than 0"),
   handleInputErrors,
-  createProduct
+  createProduct,
 );
 /**
  *@swagger
@@ -190,13 +190,13 @@ router.put(
     .withMessage("Not a valid format")
     .notEmpty()
     .withMessage("Cant be empty")
-    .custom(value => value > 0)
+    .custom((value) => value > 0)
     .withMessage("cant be lower than 0"),
   body("availability")
     .isBoolean()
     .withMessage("Availability can only be set to true or false"),
   handleInputErrors,
-  updateProduct
+  updateProduct,
 );
 /**
  * @swagger
@@ -231,7 +231,7 @@ router.patch(
   param("id").isInt().withMessage("ID not valid"),
   param("id").isInt().withMessage("ID not valid"),
   handleInputErrors,
-  updateAvailability
+  updateAvailability,
 );
 /**
  * @swagger
@@ -265,6 +265,6 @@ router.delete(
   "/:id",
   param("id").isInt().withMessage("ID not valid"),
   handleInputErrors,
-  deleteProduct
+  deleteProduct,
 );
 export default router;

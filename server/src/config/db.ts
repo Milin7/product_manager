@@ -1,16 +1,23 @@
-import { Sequelize } from "sequelize-typescript";
+import { Pool } from "pg";
 import dotenv from "dotenv";
+
 dotenv.config();
 
-const sequelize = new Sequelize(process.env.DATABASE_URL!, {
-  models: [__dirname + "/../models/**/*"],
-  logging: false,
-  dialectOptions: {
-    ssl: {
-      require: true,
-      rejectUnauthorized: false
-    }
-  }
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
 });
 
-export default sequelize;
+pool.on("connect", () => {
+  console.log("Database connected successfully");
+});
+
+pool.on("error", (err) => {
+  console.error("Unexpected error on idle client", err);
+  process.exit(-1);
+});
+
+export const query = {
+  query: (text: string, params?: any[]) => pool.query(text, params),
+};
+
+export default pool;

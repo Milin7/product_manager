@@ -4,18 +4,17 @@ import morgan from "morgan";
 import swaggerUI from "swagger-ui-express";
 import swaggerSpec, { swaggerUiOptions } from "./config/swagger";
 import router from "./router";
-import sequelize from "./config/db";
+import pool from "./config/db";
 
 // Connect to data base
 export async function connectDB() {
   try {
-    await sequelize.authenticate();
-    sequelize.sync();
-    console.log("Connection has been established successfully.");
+    await pool.connect();
   } catch (error) {
-    console.log(`Unable to connect to the database`);
+    console.error("Database connection error:", error);
   }
 }
+
 connectDB();
 
 //Express instance
@@ -24,10 +23,16 @@ const server = express();
 // Allow connections
 const corsOptions: CorsOptions = {
   origin: function (origin, callback) {
-    if (origin === process.env.FRONTEND_URL) {
+    if (!origin) {
+      return callback(null, true);
+    }
+
+    const allowedOrigins = [process.env.FRONTEND_URL, process.env.BACKEND_URL];
+
+    if (allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
-      callback(new Error("Error de CORS"));
+      callback(new Error("Not allowed by CORS"));
     }
   },
   allowedHeaders: ["Content-Type", "Authorization"],
