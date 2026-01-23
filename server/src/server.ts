@@ -11,7 +11,7 @@ export async function connectDB() {
   try {
     await sequelize.authenticate();
     sequelize.sync();
-    // console.log("Connection has been established successfully.");
+    console.log("Connection has been established successfully.");
   } catch (error) {
     console.log(`Unable to connect to the database`);
   }
@@ -23,14 +23,14 @@ const server = express();
 
 // Allow connections
 const corsOptions: CorsOptions = {
-  origin: function(origin, callback) {
+  origin: function (origin, callback) {
     if (origin === process.env.FRONTEND_URL) {
       callback(null, true);
     } else {
       callback(new Error("Error de CORS"));
     }
   },
-  allowedHeaders: ["Content-Type", "Authorization"], 
+  allowedHeaders: ["Content-Type", "Authorization"],
 };
 server.use(cors(corsOptions));
 
@@ -46,7 +46,7 @@ server.use("/api/products", router);
 server.use(
   "/docs",
   swaggerUI.serve,
-  swaggerUI.setup(swaggerSpec, swaggerUiOptions)
+  swaggerUI.setup(swaggerSpec, swaggerUiOptions),
 );
 
 export default server;
