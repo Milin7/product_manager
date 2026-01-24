@@ -3,6 +3,6 @@ export interface AuthResponseDto {
   user: {
     id: number;
     email: string;
-    createdAt: Date;
+    created_at: Date;
   };
 }

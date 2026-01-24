@@ -17,7 +17,9 @@ class RefreshTokenRepository {
     return result.rows[0];
   }
 
-  async findTokenHash(tokenHash: string): Promise<RefreshTokenWithUser | null> {
+  async findByTokenHash(
+    tokenHash: string,
+  ): Promise<RefreshTokenWithUser | null> {
     const result = await pool.query<RefreshTokenWithUser>(
       "SELECT rt.id, rt.user_id, rt.token_hash, rt.device_info, rt.expires_at, rt.created_at, rt.last_used_at, json_build_object('id', u.id, 'email', u.email) as user FROM refresh_tokens rt INNER JOIN users u ON rt.user_id = u.id WHERE rt.token_hash = $1 AND rt.expires_at > NOW()",
       [tokenHash],
