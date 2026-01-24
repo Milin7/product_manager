@@ -1,16 +1,14 @@
 import { Router } from "express";
+import { ProductController } from "../controllers/Product.controller";
 import {
-  createProduct,
-  getProducts,
-  getProductById,
-  updateProduct,
-  updateAvailability,
-  deleteProduct,
-} from "./handlers/product";
-import { body, param } from "express-validator";
-import { handleInputErrors } from "./middleware";
+  createProductValidator,
+  updateProductValidator,
+  productIdValidator,
+} from "../validators/product.validator";
+import { handleValidationErrors } from "../middleware/validation.middleware";
 
 const router = Router();
+
 /**
  * @swagger
  * components:
@@ -54,6 +52,7 @@ const router = Router();
  *              items:
  *                $ref: '#/components/schemas/Product'
  */
+router.get("/", ProductController.getAll);
 
 /**
  *@swagger
@@ -82,14 +81,11 @@ const router = Router();
  *        400:
  *          description: Bad request, invalid ID
  */
-
-//Routing
-router.get("/", getProducts);
 router.get(
   "/:id",
-  param("id").isInt().withMessage("ID not valid"),
-  handleInputErrors,
-  getProductById,
+  productIdValidator,
+  handleValidationErrors,
+  ProductController.getById,
 );
 
 /**
@@ -123,81 +119,13 @@ router.get(
  *      400:
  *        description: Bad request - invalid input data
  */
-
 router.post(
   "/",
-  body("name").notEmpty().withMessage("Cant be empty"),
-  body("price")
-    .isNumeric()
-    .withMessage("Not a valid format")
-    .notEmpty()
-    .withMessage("Cant be empty")
-    .custom((value) => value > 0)
-    .withMessage("cant be lower than 0"),
-  handleInputErrors,
-  createProduct,
+  createProductValidator,
+  handleValidationErrors,
+  ProductController.create,
 );
-/**
- *@swagger
- *
- * /api/products/{id}:
- *  put:
- *    summary: Updates a product with user input
- *    tags:
- *      - Products
- *    description: Returns the updated product
- *    parameters:
- *    - in: path
- *      name: id
- *      description: The ID of the product to retrieve
- *      required: true
- *      schema:
- *        type: integer
- *    requestBody:
- *        required: true
- *        content:
- *          application/json:
- *            schema:
- *              type: object
- *              properties:
- *                name:
- *                  type: string
- *                  example: "Black mechanical keyboard"
- *                price:
- *                  type: number
- *                  example: 300
- *                availability:
- *                  type: boolean
- *                  example: true
- *    responses:
- *      200:
- *          description: Successful Response
- *          content:
- *            application/json:
- *              schema:
- *                  $ref: '#/components/schemas/Product'
- *      400:
- *        description: Bad request - Invalid ID or Invalid input data
- *      404:
- *        description: Product not found
- */
-router.put(
-  "/:id",
-  param("id").isInt().withMessage("ID not valid"),
-  body("name").notEmpty().withMessage("Cant be empty"),
-  body("price")
-    .isNumeric()
-    .withMessage("Not a valid format")
-    .notEmpty()
-    .withMessage("Cant be empty")
-    .custom((value) => value > 0)
-    .withMessage("cant be lower than 0"),
-  body("availability")
-    .isBoolean()
-    .withMessage("Availability can only be set to true or false"),
-  handleInputErrors,
-  updateProduct,
-);
+
 /**
  * @swagger
  * /api/products/{id}:
@@ -225,14 +153,47 @@ router.put(
  *      404:
  *        description: Product not found
  */
+router.put(
+  "/:id",
+  updateProductValidator,
+  handleValidationErrors,
+  ProductController.update,
+);
 
+/**
+ * @swagger
+ * /api/products/{id}:
+ *   patch:
+ *    summary: Update product availability
+ *    tags:
+ *        - Products
+ *    description: Returns the updated availability
+ *    parameters:
+ *    - in: path
+ *      name: id
+ *      description: The ID of the product to retrieve
+ *      required: true
+ *      schema:
+ *        type: integer
+ *    responses:
+ *      200:
+ *          description: Successful Response
+ *          content:
+ *            application/json:
+ *              schema:
+ *                  $ref: '#/components/schemas/Product'
+ *      400:
+ *        description: Bad request - Invalid ID
+ *      404:
+ *        description: Product not found
+ */
 router.patch(
   "/:id",
-  param("id").isInt().withMessage("ID not valid"),
-  param("id").isInt().withMessage("ID not valid"),
-  handleInputErrors,
-  updateAvailability,
+  productIdValidator,
+  handleValidationErrors,
+  ProductController.toggleAvailability,
 );
+
 /**
  * @swagger
  * /api/products/{id}:
@@ -263,8 +224,9 @@ router.patch(
  */
 router.delete(
   "/:id",
-  param("id").isInt().withMessage("ID not valid"),
-  handleInputErrors,
-  deleteProduct,
+  productIdValidator,
+  handleValidationErrors,
+  ProductController.delete,
 );
+
 export default router;
