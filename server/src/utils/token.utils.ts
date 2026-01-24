@@ -64,9 +64,9 @@ export const calculateTokenExpiration = (
     case "m":
       return new Date(now.getTime() + value * 60 * 1000);
     case "h":
-      return new Date(now.getTime() * 60 * 60 * 1000);
+      return new Date(now.getTime() + value * 60 * 60 * 1000);
     case "d":
-      return new Date(now.getTime() * 24 * 60 * 60 * 1000);
+      return new Date(now.getTime() + value * 24 * 60 * 60 * 1000);
     default:
       throw new Error("Invalid time unit");
   }

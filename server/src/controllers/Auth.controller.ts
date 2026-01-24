@@ -1,39 +1,27 @@
 import { Request, Response } from "express";
 import authService from "../services/Auth.service";
 import { extractDeviceInfo } from "../utils/device.utils";
-import { hashToken } from "../utils/crypto.utils";
 
-/**
- * Auth Controller
- * Handles HTTP requests for authentication endpoints
- */
 class AuthController {
-  /**
-   * Register a new user
-   * POST /api/auth/register
-   */
   async register(req: Request, res: Response): Promise<void> {
     try {
       const { email, password } = req.body;
       const deviceInfo = extractDeviceInfo(req);
 
-      // Call auth service
       const { authResponse, refreshToken } = await authService.register(
         email,
         password,
         deviceInfo,
       );
 
-      // Set refresh token in HttpOnly cookie
       res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production", // HTTPS only in production
+        secure: process.env.NODE_ENV === "production",
         sameSite: "strict",
-        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-        path: "/api/auth", // Only sent to auth endpoints
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+        path: "/api/auth",
       });
 
-      // Send access token in response body
       res.status(201).json({
         success: true,
         message: "User registered successfully",
@@ -55,10 +43,6 @@ class AuthController {
     }
   }
 
-  /**
-   * Login existing user
-   * POST /api/auth/login
-   */
   async login(req: Request, res: Response): Promise<void> {
     try {
       const { email, password } = req.body;
@@ -102,10 +86,6 @@ class AuthController {
     }
   }
 
-  /**
-   * Refresh access token
-   * POST /api/auth/refresh
-   */
   async refreshToken(req: Request, res: Response): Promise<void> {
     try {
       const refreshToken = req.cookies.refreshToken;
@@ -144,10 +124,6 @@ class AuthController {
     }
   }
 
-  /**
-   * Logout current session
-   * POST /api/auth/logout
-   */
   async logout(req: Request, res: Response): Promise<void> {
     try {
       const refreshToken = req.cookies.refreshToken;
@@ -178,11 +154,6 @@ class AuthController {
     }
   }
 
-  /**
-   * Logout all sessions
-   * POST /api/auth/logout-all
-   * Requires authentication
-   */
   async logoutAll(req: Request, res: Response): Promise<void> {
     try {
       const userId = req.user?.userId;
@@ -213,11 +184,6 @@ class AuthController {
     }
   }
 
-  /**
-   * Get current user info
-   * GET /api/auth/me
-   * Requires authentication
-   */
   async getCurrentUser(req: Request, res: Response): Promise<void> {
     try {
       const userId = req.user?.userId;

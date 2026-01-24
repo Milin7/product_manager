@@ -32,32 +32,26 @@ class AuthService {
     password: string,
     deviceInfo: DeviceInfo,
   ): Promise<{ authResponse: AuthResponseDto; refreshToken: string }> {
-    // Step 1: Check if email already exists
     const existingUser = await userRepository.findByEmail(email);
     if (existingUser) {
       throw new Error("Email already in use");
     }
 
-    // Step 2: Hash password (bcrypt with 10 salt rounds)
     const passwordHash = await hashPassword(password);
-
-    // Step 3: Create user in database
     const user = await userRepository.createUser(email, passwordHash);
 
-    // Step 4: Generate tokens
     const accessToken = tokenService.generateAccessToken(user.id, user.email);
     const refreshToken = await tokenService.generateRefreshToken(
       user.id,
       deviceInfo,
     );
 
-    // Step 5: Return response (no sensitive data)
     return {
       authResponse: {
         accessToken,
-        user: toSafeUser(user), // Remove password_hash
+        user: toSafeUser(user),
       },
-      refreshToken, // To be set in HttpOnly cookie
+      refreshToken,
     };
   }
 
@@ -81,32 +75,28 @@ class AuthService {
     password: string,
     deviceInfo: DeviceInfo,
   ): Promise<{ authResponse: AuthResponseDto; refreshToken: string }> {
-    // Step 1: Find user by email
     const user = await userRepository.findByEmail(email);
     if (!user) {
       throw new Error("Invalid email or password");
     }
 
-    // Step 2: Verify password
     const isPasswordValid = await comparePassword(password, user.password_hash);
     if (!isPasswordValid) {
       throw new Error("Invalid email or password");
     }
 
-    // Step 3: Generate tokens
     const accessToken = tokenService.generateAccessToken(user.id, user.email);
     const refreshToken = await tokenService.generateRefreshToken(
       user.id,
       deviceInfo,
     );
 
-    // Step 4: Return response
     return {
       authResponse: {
         accessToken,
         user: toSafeUser(user),
       },
-      refreshToken, // To be set in HttpOnly cookie
+      refreshToken,
     };
   }
 
