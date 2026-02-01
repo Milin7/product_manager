@@ -1,11 +1,12 @@
 import { Router } from "express";
 import { ProductController } from "../controllers/Product.controller";
 import {
-  createProductValidator,
-  updateProductValidator,
-  productIdValidator,
+  createProductSchema,
+  patchProductSchema,
+  productIdSchema,
+  updateProductSchema,
 } from "../validators/product.validator";
-import { handleValidationErrors } from "../middleware/validation.middleware";
+import { validate } from "../middleware/validate.middleware";
 
 const router = Router();
 
@@ -81,12 +82,7 @@ router.get("/", ProductController.getAll);
  *        400:
  *          description: Bad request, invalid ID
  */
-router.get(
-  "/:id",
-  productIdValidator,
-  handleValidationErrors,
-  ProductController.getById,
-);
+router.get("/:id", validate(productIdSchema), ProductController.getById);
 
 /**
  * @swagger
@@ -119,12 +115,7 @@ router.get(
  *      400:
  *        description: Bad request - invalid input data
  */
-router.post(
-  "/",
-  createProductValidator,
-  handleValidationErrors,
-  ProductController.create,
-);
+router.post("/", validate(createProductSchema), ProductController.create);
 
 /**
  * @swagger
@@ -153,12 +144,7 @@ router.post(
  *      404:
  *        description: Product not found
  */
-router.put(
-  "/:id",
-  updateProductValidator,
-  handleValidationErrors,
-  ProductController.update,
-);
+router.put("/:id", validate(updateProductSchema), ProductController.update);
 
 /**
  * @swagger
@@ -189,8 +175,7 @@ router.put(
  */
 router.patch(
   "/:id",
-  productIdValidator,
-  handleValidationErrors,
+  validate(patchProductSchema),
   ProductController.toggleAvailability,
 );
 
@@ -222,11 +207,6 @@ router.patch(
  *      404:
  *        description: Product not found
  */
-router.delete(
-  "/:id",
-  productIdValidator,
-  handleValidationErrors,
-  ProductController.delete,
-);
+router.delete("/:id", validate(productIdSchema), ProductController.delete);
 
 export default router;

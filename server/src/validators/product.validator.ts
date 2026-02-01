@@ -1,49 +1,41 @@
-import { body, param } from "express-validator";
+import { z } from "zod";
 
-export const createProductValidator = [
-  body("name")
-    .notEmpty()
-    .withMessage("Product name is required")
-    .isString()
-    .withMessage("Product name must be a string")
-    .trim()
-    .isLength({ max: 100 })
-    .withMessage("Product name cannot exceed 100 characters"),
+export const productIdSchema = z.object({
+  params: z.object({
+    id: z.string().transform(Number),
+  }),
+});
 
-  body("price")
-    .notEmpty()
-    .withMessage("Price is required")
-    .isNumeric()
-    .withMessage("Price must be a number")
-    .custom((value) => value > 0)
-    .withMessage("Price must be greater than 0"),
-];
+export const createProductSchema = z.object({
+  body: z.object({
+    name: z.string().min(1).max(100).trim(),
+    price: z.number().positive(),
+  }),
+});
 
-export const updateProductValidator = [
-  param("id").isInt().withMessage("Invalid product ID"),
+export const updateProductSchema = z.object({
+  params: z.object({
+    id: z.string().transform(Number),
+  }),
+  body: z.object({
+    name: z.string().min(1).max(100).trim(),
+    price: z.number().positive(),
+    availability: z.boolean(),
+  }),
+});
 
-  body("name")
-    .notEmpty()
-    .withMessage("Product name is required")
-    .isString()
-    .withMessage("Product name must be a string")
-    .trim()
-    .isLength({ max: 100 })
-    .withMessage("Product name cannot exceed 100 characters"),
+export const patchProductSchema = z.object({
+  params: z.object({
+    id: z.string().transform(Number),
+  }),
+  body: z.object({
+    name: z.string().min(1).max(100).trim().optional(),
+    price: z.number().positive().optional(),
+    availability: z.boolean().optional(),
+  }),
+});
 
-  body("price")
-    .notEmpty()
-    .withMessage("Price is required")
-    .isNumeric()
-    .withMessage("Price must be a number")
-    .custom((value) => value > 0)
-    .withMessage("Price must be greater than 0"),
-
-  body("availability")
-    .isBoolean()
-    .withMessage("Availability must be a boolean"),
-];
-
-export const productIdValidator = [
-  param("id").isInt().withMessage("Invalid product ID"),
-];
+export type ProductIdInput = z.infer<typeof productIdSchema>;
+export type CreateProductInput = z.infer<typeof createProductSchema>;
+export type UpdateProductInput = z.infer<typeof updateProductSchema>;
+export type PatchProductInput = z.infer<typeof patchProductSchema>;
