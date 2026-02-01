@@ -120,7 +120,7 @@ router.post("/", validate(createProductSchema), ProductController.create);
 /**
  * @swagger
  * /api/products/{id}:
- *   patch:
+ *   put:
  *    summary: Update product availability
  *    tags:
  *        - Products
