@@ -116,10 +116,6 @@ class AuthService {
     return newAccessToken;
   }
 
-  /**
-   * Logout user (revoke current session)
-   * @param refreshToken - Plain refresh token from cookie
-   */
   async logout(refreshToken: string): Promise<void> {
     await tokenService.revokeRefreshToken(refreshToken);
   }

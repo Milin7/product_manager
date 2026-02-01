@@ -15,7 +15,6 @@ export const authenticateToken = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
-    // Step 1: Extract token from Authorization header
     const authHeader = req.headers.authorization;
     const token = extractBearerToken(authHeader);
 
@@ -27,16 +26,11 @@ export const authenticateToken = async (
       return;
     }
 
-    // Step 2: Verify token signature and expiration
     const decoded = tokenService.verifyAccessToken(token);
-
-    // Step 3: Attach user info to request object
     req.user = decoded;
 
-    // Step 4: Continue to next middleware/controller
     next();
   } catch (error) {
-    // Token is invalid or expired
     if (error instanceof Error) {
       res.status(401).json({
         success: false,
@@ -75,7 +69,6 @@ export const optionalAuth = async (
 
     next();
   } catch (error) {
-    // Silently ignore invalid tokens for optional auth
     next();
   }
 };

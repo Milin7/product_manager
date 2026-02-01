@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import authService from "../services/Auth.service";
 import { extractDeviceInfo } from "../utils/device.utils";
+import { error } from "node:console";
 
 class AuthController {
   async register(req: Request, res: Response): Promise<void> {
@@ -136,10 +137,8 @@ class AuthController {
         return;
       }
 
-      // Revoke refresh token
       await authService.logout(refreshToken);
 
-      // Clear cookie
       res.clearCookie("refreshToken", { path: "/api/auth" });
 
       res.status(200).json({
@@ -166,10 +165,8 @@ class AuthController {
         return;
       }
 
-      // Revoke all refresh tokens
       await authService.logoutAll(userId);
 
-      // Clear current cookie
       res.clearCookie("refreshToken", { path: "/api/auth" });
 
       res.status(200).json({
