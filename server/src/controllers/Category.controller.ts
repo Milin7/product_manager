@@ -17,6 +17,25 @@ export class CategoryController {
     }
   }
 
+  static async getCategoryById(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ) {
+    try {
+      const { userId, categoryId } = req.params;
+      const parsedUserId = parseInt(userId as string);
+      const parsedCategoryId = parseInt(categoryId as string);
+      const category = await CategoryService.getCategoryById(
+        parsedUserId,
+        parsedCategoryId,
+      );
+      return res.json({ success: true, data: category });
+    } catch (error) {
+      next();
+    }
+  }
+
   static async createCategory(req: Request, res: Response, next: NextFunction) {
     try {
       const userId = parseInt(req.params.userId as string);

@@ -70,6 +70,45 @@ router.get(
 );
 
 /**
+ * @swagger
+ * /api/categories/{userId}/{categoryId}:
+ *   get:
+ *     summary: Get a category by id
+ *     tags:
+ *       - Categories
+ *     description: Return the category specified by userId and categoryId
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The userId of the user
+ *       - in: path
+ *         name: categoryId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The categoryId to retrieve
+ *     responses:
+ *       200:
+ *         description: Successful Response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Category'
+ *       404:
+ *         description: Category not found
+ *       400:
+ *         description: Bad request, invalid userId or categoryId
+ */
+router.get(
+  "/:userId/:categoryId",
+  validate(categoryAndUserIdSchema),
+  CategoryController.getCategoryById,
+);
+
+/**
  *@swagger
  *  /api/categories/{userId}:
  *    post:

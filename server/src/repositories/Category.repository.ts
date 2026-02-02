@@ -17,6 +17,24 @@ export class CategoryRepository {
     return result.rows;
   }
 
+  static async getCategoryByIdAsync(
+    userId: number,
+    categoryId: number,
+  ): Promise<Category> {
+    const query = `
+    SELECT
+      id,
+      category,
+      user_id,
+      description
+    FROM categories
+    WHERE user_id = $1
+      AND id = $2
+    `;
+    const result = await pool.query<Category>(query, [userId, categoryId]);
+    return result.rows[0];
+  }
+
   static async createCategoryByUserAsync(
     createCategoryDto: CreateCategoryDto,
     userId: number,

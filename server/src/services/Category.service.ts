@@ -26,6 +26,21 @@ export class CategoryService {
     return categories.map((cat) => this.toResponseDto(cat));
   }
 
+  static async getCategoryById(
+    userId: number,
+    categoryId: number,
+  ): Promise<CategoryResponseDto> {
+    const category = await CategoryRepository.getCategoryByIdAsync(
+      userId,
+      categoryId,
+    );
+
+    if (!category) {
+      throw new NotFoundError("This category doesn't exist.");
+    }
+    return this.toResponseDto(category);
+  }
+
   static async createCategory(
     createCategoryDto: CreateCategoryDto,
     userId: number,
