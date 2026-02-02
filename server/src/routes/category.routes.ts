@@ -1,6 +1,9 @@
 import { Router } from "express";
 import { validate } from "../middleware/validate.middleware";
-import { userIdCategorySchema } from "../validators/category.validator";
+import {
+  categoryAndUserIdSchema,
+  userIdCategorySchema,
+} from "../validators/category.validator";
 import { CategoryController } from "../controllers/Category.controller";
 
 const router = Router();
@@ -95,21 +98,90 @@ router.get(
  *                  type: string
  *                  example: "This is the category for my rent due monthly"
  *      responses:
- *        200:
- *          description: Successful Response
- *          content:
- *            application/json:
- *              schema:
- *                $ref: '#/components/schemas/Category'
+ *        201:
+ *          description: Category created successfully
  *        404:
- *          description: User doesn't exist in database
- *        400:
- *          description: Bad request, invalid userId
+ *          description: User not found
+ *
  */
 router.post(
   "/:userId",
   validate(userIdCategorySchema),
   CategoryController.createCategory,
+);
+
+/**
+ * @swagger
+ * /api/categories/{userId}:
+ *   delete:
+ *     summary: Deletes all categories of a current user
+ *     tags:
+ *       - Categories
+ *     description: Returns all the objects that were deleted
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         description: The userId that will delete all the categories
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Successful Response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: string
+ *               example: "All categories for the user has been deleted"
+ *       400:
+ *         description: Bad request - Invalid userId
+ *       404:
+ *         description: Categories not found
+ */
+router.delete(
+  "/:userId",
+  validate(userIdCategorySchema),
+  CategoryController.deleteAllCategories,
+);
+
+/**
+ * @swagger
+ * /api/categories/{userId}/{categoryId}:
+ *   delete:
+ *     summary: Deletes the category for the current user
+ *     tags:
+ *       - Categories
+ *     description: Returns the category that was deleted
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         description: The userId that will delete all the categories
+ *         required: true
+ *         schema:
+ *           type: integer
+ *       - in: path
+ *         name: categoryId
+ *         description: The categoryId that will be deleted
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       204:
+ *         description: Successful Response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: string
+ *               example: "The category specified for the user has been deleted"
+ *       400:
+ *         description: Bad request - Invalid userId
+ *       404:
+ *         description: Categories not found
+ */
+router.delete(
+  "/:userId/:categoryId",
+  validate(categoryAndUserIdSchema),
+  CategoryController.deleteCategoryById,
 );
 
 export default router;

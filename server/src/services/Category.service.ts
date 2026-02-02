@@ -43,4 +43,15 @@ export class CategoryService {
       throw error;
     }
   }
+
+  static async deleteCategoryById(
+    userId: number,
+    categoryId: number,
+  ): Promise<void> {
+    await CategoryRepository.deleteCategoryByIdAsync(userId, categoryId);
+  }
+
+  static async deleteAllCategories(userId: number): Promise<void> {
+    await CategoryRepository.deleteAllCategoriesAsync(userId);
+  }
 }

@@ -34,4 +34,24 @@ export class CategoryRepository {
     ]);
     return result.rows[0];
   }
+
+  static async deleteCategoryByIdAsync(
+    userId: number,
+    categoryId: number,
+  ): Promise<void> {
+    const query = `
+    DELETE FROM categories
+    WHERE user_id = $1
+      AND id = $2
+    `;
+    await pool.query(query, [userId, categoryId]);
+  }
+
+  static async deleteAllCategoriesAsync(userId: number): Promise<void> {
+    const query = `
+    DELETE FROM categories
+    WHERE user_id = $1
+    `;
+    await pool.query(query, [userId]);
+  }
 }
