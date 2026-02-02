@@ -1,6 +1,7 @@
 import { CategoryResponseDto } from "../dto/category/CategoryResponse.dto";
 import { CreateCategoryDto } from "../dto/category/CreateCategory.dto";
-import { Category } from "../models/Category.model";
+import { UpdateCategoryDto } from "../dto/category/UpdateCategory.dto";
+import { Category, CategoryParams } from "../models/Category.model";
 import { CategoryRepository } from "../repositories/Category.repository";
 import { NotFoundError } from "../utils/errors";
 
@@ -27,13 +28,9 @@ export class CategoryService {
   }
 
   static async getCategoryById(
-    userId: number,
-    categoryId: number,
+    params: CategoryParams,
   ): Promise<CategoryResponseDto> {
-    const category = await CategoryRepository.getCategoryByIdAsync(
-      userId,
-      categoryId,
-    );
+    const category = await CategoryRepository.getCategoryByIdAsync(params);
 
     if (!category) {
       throw new NotFoundError("This category doesn't exist.");
@@ -59,11 +56,33 @@ export class CategoryService {
     }
   }
 
-  static async deleteCategoryById(
-    userId: number,
-    categoryId: number,
-  ): Promise<void> {
-    await CategoryRepository.deleteCategoryByIdAsync(userId, categoryId);
+  static async updateCategory(
+    params: CategoryParams,
+    updateDto: UpdateCategoryDto,
+  ): Promise<CategoryResponseDto> {
+    const existingCategory =
+      await CategoryRepository.getCategoryByIdAsync(params);
+
+    if (!existingCategory) {
+      throw new NotFoundError(
+        "Category not found or does not belong to this user",
+      );
+    }
+
+    const updatedData: Category = {
+      ...existingCategory,
+      category: updateDto.category ?? existingCategory.category,
+      description: updateDto.description ?? existingCategory.description,
+    };
+
+    const savedCategory =
+      await CategoryRepository.updateCategoryAsync(updatedData);
+
+    return this.toResponseDto(savedCategory);
+  }
+
+  static async deleteCategoryById(params: CategoryParams): Promise<void> {
+    await CategoryRepository.deleteCategoryByIdAsync(params);
   }
 
   static async deleteAllCategories(userId: number): Promise<void> {

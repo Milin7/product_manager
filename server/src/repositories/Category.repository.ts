@@ -1,6 +1,6 @@
 import pool from "../config/db";
 import { CreateCategoryDto } from "../dto/category/CreateCategory.dto";
-import { Category } from "../models/Category.model";
+import { Category, CategoryParams } from "../models/Category.model";
 
 export class CategoryRepository {
   static async findCategoriesByUser(userId: number): Promise<Category[]> {
@@ -17,10 +17,8 @@ export class CategoryRepository {
     return result.rows;
   }
 
-  static async getCategoryByIdAsync(
-    userId: number,
-    categoryId: number,
-  ): Promise<Category> {
+  static async getCategoryByIdAsync(params: CategoryParams): Promise<Category> {
+    const { userId, categoryId } = params;
     const query = `
     SELECT
       id,
@@ -53,10 +51,26 @@ export class CategoryRepository {
     return result.rows[0];
   }
 
-  static async deleteCategoryByIdAsync(
-    userId: number,
-    categoryId: number,
-  ): Promise<void> {
+  static async updateCategoryAsync(category: Category): Promise<Category> {
+    const { id, user_id, category: catName, description } = category;
+    const query = `
+    UPDATE categories
+      SET category = $1, description = $2
+    WHERE user_id = $3
+      AND id = $4
+    RETURNING *;
+    `;
+    const result = await pool.query<Category>(query, [
+      catName,
+      description,
+      user_id,
+      id,
+    ]);
+    return result.rows[0];
+  }
+
+  static async deleteCategoryByIdAsync(params: CategoryParams): Promise<void> {
+    const { userId, categoryId } = params;
     const query = `
     DELETE FROM categories
     WHERE user_id = $1

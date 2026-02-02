@@ -2,6 +2,7 @@ import { Router } from "express";
 import { validate } from "../middleware/validate.middleware";
 import {
   categoryAndUserIdSchema,
+  updateCategorySchema,
   userIdCategorySchema,
 } from "../validators/category.validator";
 import { CategoryController } from "../controllers/Category.controller";
@@ -62,7 +63,6 @@ const router = Router();
  *        400:
  *          description: Bad request, invalid userId
  */
-
 router.get(
   "/:userId",
   validate(userIdCategorySchema),
@@ -147,6 +147,60 @@ router.post(
   "/:userId",
   validate(userIdCategorySchema),
   CategoryController.createCategory,
+);
+
+/**
+ * @swagger
+ * /api/categories/{userId}/{categoryId}:
+ *   patch:
+ *     summary: Update a category for a user
+ *     tags:
+ *       - Categories
+ *     description: Partially updates the category and/or description for the specified category belonging to the user.
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The user ID
+ *       - in: path
+ *         name: categoryId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The category ID to update
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               category:
+ *                 type: string
+ *                 example: "Updated category"
+ *               description:
+ *                 type: string
+ *                 example: "This is the updated description"
+ *             minProperties: 1
+ *             description: At least one of category or description must be provided.
+ *     responses:
+ *       200:
+ *         description: Category updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Category'
+ *       400:
+ *         description: Bad request - Invalid userId, categoryId, or body
+ *       404:
+ *         description: Category not found
+ */
+router.patch(
+  "/:userId/:categoryId",
+  validate(updateCategorySchema),
+  CategoryController.updateCategory,
 );
 
 /**
