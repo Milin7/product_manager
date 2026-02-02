@@ -2,19 +2,9 @@ import { Request, Response, NextFunction } from "express";
 import { CategoryService } from "../services/Category.service";
 import { CreateCategoryDto } from "../dto/category/CreateCategory.dto";
 import { UpdateCategoryDto } from "../dto/category/UpdateCategory.dto";
-import { CategoryParams } from "../models/Category.model";
+import { parseCategoryParams } from "../utils/params.utils";
 
 export class CategoryController {
-  private static parseCategoryAndUser(req: Request) {
-    const { userId, categoryId } = req.params;
-    const parsedUserId = parseInt(userId as string);
-    const parsedCategoryId = parseInt(categoryId as string);
-    return {
-      userId: parsedUserId,
-      categoryId: parsedCategoryId,
-    } as CategoryParams;
-  }
-
   static async getCategoryByUser(
     req: Request,
     res: Response,
@@ -35,7 +25,7 @@ export class CategoryController {
     next: NextFunction,
   ) {
     try {
-      const params = CategoryController.parseCategoryAndUser(req);
+      const params = parseCategoryParams(req);
       const category = await CategoryService.getCategoryById(params);
       return res.json({ success: true, data: category });
     } catch (error) {
@@ -59,7 +49,7 @@ export class CategoryController {
 
   static async updateCategory(req: Request, res: Response, next: NextFunction) {
     try {
-      const params = CategoryController.parseCategoryAndUser(req);
+      const params = parseCategoryParams(req);
       const updateDto: UpdateCategoryDto = req.body;
 
       const updatedCategory = await CategoryService.updateCategory(
@@ -78,7 +68,7 @@ export class CategoryController {
     next: NextFunction,
   ) {
     try {
-      const params = CategoryController.parseCategoryAndUser(req);
+      const params = parseCategoryParams(req);
       await CategoryService.deleteCategoryById(params);
 
       return res.status(204).send();
