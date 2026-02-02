@@ -4,4 +4,5 @@ export interface TransactionResponseDto {
   type: string;
   description: string;
   categoryName: string;
+  transactionDate: Date;
 }
