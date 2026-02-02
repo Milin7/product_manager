@@ -1,6 +1,6 @@
 export interface Category {
   id: number;
-  category: string;
+  name: string;
   user_id: number;
   description?: string;
 }

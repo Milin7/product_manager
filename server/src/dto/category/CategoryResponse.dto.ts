@@ -1,6 +1,6 @@
 export interface CategoryResponseDto {
   id: number;
-  category: string;
+  categoryName: string;
   userId: number;
-  description?: string;
+  categoryDescription?: string;
 }

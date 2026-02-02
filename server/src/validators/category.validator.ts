@@ -16,14 +16,14 @@ export const categoryAndUserIdSchema = z.object({
 export const updateCategorySchema = z.object({
   body: z
     .object({
-      category: z.string().min(1),
+      name: z.string().min(1),
       description: z.string().min(1),
     })
     .partial()
     .refine(
-      (data) => data.category !== undefined || data.description !== undefined,
+      (data) => data.name !== undefined || data.description !== undefined,
       {
-        message: "Either category or description must be provided",
+        message: "Either category name or description must be provided",
       },
     ),
   params: z.object({

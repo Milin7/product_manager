@@ -7,7 +7,7 @@ export class CategoryRepository {
     const query = `
         SELECT 
             id, 
-            category, 
+            name, 
             user_id, 
             description 
         FROM categories
@@ -22,7 +22,7 @@ export class CategoryRepository {
     const query = `
     SELECT
       id,
-      category,
+      name,
       user_id,
       description
     FROM categories
@@ -37,14 +37,14 @@ export class CategoryRepository {
     createCategoryDto: CreateCategoryDto,
     userId: number,
   ): Promise<Category> {
-    const { category, description } = createCategoryDto;
+    const { name, description } = createCategoryDto;
     const query = `
-    INSERT INTO categories (category, user_id, description)
+    INSERT INTO categories (name, user_id, description)
     VALUES ($1, $2, $3)
-    RETURNING id, category, user_id, description;
+    RETURNING id, name, user_id, description;
     `;
     const result = await pool.query<Category>(query, [
-      category,
+      name,
       userId,
       description,
     ]);
@@ -52,16 +52,16 @@ export class CategoryRepository {
   }
 
   static async updateCategoryAsync(category: Category): Promise<Category> {
-    const { id, user_id, category: catName, description } = category;
+    const { id, user_id, name, description } = category;
     const query = `
     UPDATE categories
-      SET category = $1, description = $2
+      SET name = $1, description = $2
     WHERE user_id = $3
       AND id = $4
     RETURNING *;
     `;
     const result = await pool.query<Category>(query, [
-      catName,
+      name,
       description,
       user_id,
       id,

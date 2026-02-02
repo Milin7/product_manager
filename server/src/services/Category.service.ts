@@ -6,12 +6,12 @@ import { CategoryRepository } from "../repositories/Category.repository";
 import { NotFoundError } from "../utils/errors";
 
 export class CategoryService {
-  private static toResponseDto(categories: Category): CategoryResponseDto {
+  private static toResponseDto(category: Category): CategoryResponseDto {
     return {
-      id: categories.id,
-      category: categories.category,
-      userId: categories.user_id,
-      description: categories.description,
+      id: category.id,
+      categoryName: category.name,
+      userId: category.user_id,
+      categoryDescription: category.description,
     };
   }
   static async getCategoryByUser(
@@ -71,7 +71,7 @@ export class CategoryService {
 
     const updatedData: Category = {
       ...existingCategory,
-      category: updateDto.category ?? existingCategory.category,
+      name: updateDto.name ?? existingCategory.name,
       description: updateDto.description ?? existingCategory.description,
     };
 

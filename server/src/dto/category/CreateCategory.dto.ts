@@ -1,4 +1,4 @@
 export interface CreateCategoryDto {
-  category: string;
+  name: string;
   description?: string;
 }

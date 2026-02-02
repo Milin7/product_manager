@@ -20,15 +20,15 @@ const router = Router();
  *                  type: integer
  *                  description: The category id
  *                  example: 1
- *                category:
+ *                categoryName:
  *                  type: string
  *                  description: The category name
  *                  example: "Personal expenses"
- *                user_id:
+ *                userId:
  *                  type: integer
  *                  description: The user id that's creating the category
  *                  example: 2
- *                description:
+ *                categoryDescription:
  *                  type: string
  *                  description: If you want to add a short description of the category.
  *                  example: "This category is for registering my personal expenses"
@@ -130,7 +130,7 @@ router.get(
  *            schema:
  *              type: object
  *              properties:
- *                category:
+ *                name:
  *                  type: string
  *                  example: "Rent"
  *                description:
@@ -177,7 +177,7 @@ router.post(
  *           schema:
  *             type: object
  *             properties:
- *               category:
+ *               name:
  *                 type: string
  *                 example: "Updated category"
  *               description:
