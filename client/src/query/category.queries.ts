@@ -1,5 +1,5 @@
 import { queryOptions } from "@tanstack/react-query";
-import { getCategories } from "../services/CategoryService";
+import { getCategories } from "../services/category.service";
 
 export const categoryQueries = {
   key: (userId: number) => ["categories", userId],

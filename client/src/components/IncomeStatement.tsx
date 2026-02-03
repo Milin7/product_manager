@@ -1,37 +1,41 @@
 import { AllCommunityModule, ModuleRegistry } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
-import { useState } from "react";
+import { useMemo } from "react";
 import type { ColDef } from "ag-grid-community";
-
+import { TransactionSummary } from "@/types/transaction.types";
 ModuleRegistry.registerModules([AllCommunityModule]);
 
-export default function IncomeStatement() {
-  const [rowData] = useState([
-    { make: "Tesla", model: "Model Y", price: 64950, electric: true },
-    { make: "Ford", model: "F-Series", price: 33850, electric: false },
-    { make: "Toyota", model: "Corolla", price: 29600, electric: false },
-  ]);
+interface IncomeStatementProps {
+  transactionData?: TransactionSummary[];
+}
 
-  type RowDataType = {
-    make: string;
-    model: string;
-    price: number;
-    electric: boolean;
-  };
-
-  const [colDefs] = useState<ColDef<RowDataType>[]>([
-    { field: "make" },
-    { field: "model" },
-    { field: "price" },
-    { field: "electric" },
-  ]);
+export default function IncomeStatement({
+  transactionData,
+}: IncomeStatementProps) {
+  const rowData = useMemo(() => transactionData, [transactionData]);
+  const [colDefs] = useMemo<[ColDef<TransactionSummary>[]]>(() => {
+    return [
+      [
+        {
+          field: "transactionDate",
+          headerName: "Transaction Date",
+          valueFormatter: (params) => {
+            return params.value
+              ? new Date(params.value).toLocaleDateString()
+              : "";
+          },
+        },
+        { field: "amount", headerName: "Amount" },
+        { field: "type", headerName: "Type" },
+        { field: "description", headerName: "Description" },
+        { field: "categoryName", headerName: "Category" },
+      ],
+    ];
+  }, []);
 
   return (
-    <div
-      className="ag-theme-alpine"
-      style={{ height: "calc(100vh - 500px)", width: "auto" }}
-    >
-      <AgGridReact rowData={rowData} columnDefs={colDefs} />
+    <div style={{ minHeight: "400px" }}>
+      <AgGridReact<TransactionSummary> rowData={rowData} columnDefs={colDefs} />
     </div>
   );
 }

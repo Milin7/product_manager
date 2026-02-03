@@ -1,36 +1,40 @@
-import { Link } from "@tanstack/react-router";
-import { Button } from "./ui/button";
-import { CirclePlus } from "lucide-react";
+import { Modal } from "./Modal";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "./ui/card";
 
 interface InformationCardProps {
   title: string;
   description: string;
-  value: number;
-  link: string;
+  value: string;
 }
 
 export default function InformationCard({
   title,
   description,
   value,
-  link,
 }: InformationCardProps) {
   return (
     <>
-      <div className="p-4 cursor-default rounded-2xl shadow-md bg-white w-full flex justify-between items-center">
-        <div className="flex flex-col m-auto items-center">
-          <h1 className="text-2xl font-bold mb-1">{title}</h1>
-          <p className="text-gray-700">{description}</p>
-          <p className="text-xl font-semibold">${value}</p>
-        </div>
-        <div>
-          <Link to={link}>
-            <Button variant={"ghost"} size={"icon-sm"} asChild>
-              <CirclePlus />
-            </Button>
-          </Link>
-        </div>
-      </div>
+      <Card className="w-full max-w-3xs">
+        <CardHeader>
+          <CardTitle>{title}</CardTitle>
+          <CardDescription>{description}</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="m-auto text-3xl font-semibold">
+            <p>${value}</p>
+          </div>
+        </CardContent>
+        <CardFooter>
+          <Modal title={title} />
+        </CardFooter>
+      </Card>
     </>
   );
 }
