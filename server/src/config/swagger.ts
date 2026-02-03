@@ -9,11 +9,15 @@ const options: swaggerJSDoc.Options = {
         name: "Products",
         description: "API operations related to products",
       },
+      {
+        name: "Categories",
+        description: "API operations related to categories",
+      },
     ],
     info: {
-      title: "REST API Node.js / Express / Typescript",
-      version: "1.0.0",
-      description: "API Docs for Products",
+      title: "Personal finance manager",
+      version: "1.1.0",
+      description: "API Docs for Personal Finance Manager",
     },
   },
   apis: ["./src/routes/*.ts"],
