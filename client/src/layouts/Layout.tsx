@@ -1,9 +1,13 @@
-import { Outlet } from "react-router-dom";
 const navLinks = [
   { name: "Dashboard", href: "/dashboard" },
   { name: "Products", href: "/" },
 ];
-export default function Layout() {
+
+interface LayoutProps {
+  children?: React.ReactNode;
+}
+
+export default function Layout({ children }: LayoutProps) {
   return (
     <div className="flex flex-col gap-4">
       <header>
@@ -23,9 +27,7 @@ export default function Layout() {
         </nav>
       </header>
 
-      <main className="m-4">
-        <Outlet />
-      </main>
+      <main className="m-4">{children}</main>
     </div>
   );
 }

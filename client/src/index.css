@@ -1,6 +1,7 @@
 @import "tailwindcss";
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
 
+/* TODO: stablish correctly these styles. */
+/* @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
 @theme {
   --color-project-grey: #677691;
   --color-project-blue: #012f47;
@@ -9,4 +10,4 @@
   --color-project-danger: #f5c45e;
 
   --font-montserrat: "Montserrat";
-}
+} */

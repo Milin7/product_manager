@@ -1,10 +1,10 @@
-import { Link, LinkProps } from "react-router-dom";
+import { Link } from "@tanstack/react-router";
 
 interface InformationCardProps {
   title: string;
   description: string;
   value: number;
-  link: LinkProps["to"];
+  link: string;
 }
 
 export default function InformationCard({
