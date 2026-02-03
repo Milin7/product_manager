@@ -3,6 +3,7 @@ import IncomeStatement from "../components/IncomeStatement";
 import InformationCard from "../components/InformationCard";
 import { getCategories } from "../services/CategoryService";
 import { categoryQueries } from "../query/category.queries";
+import { useAuthStore } from "@/features/auth/hooks/useAuthStore";
 
 const informationCardConfig = [
   {
@@ -20,7 +21,8 @@ const informationCardConfig = [
 ];
 
 export default function MainDashboard() {
-  const { data } = useQuery(categoryQueries.all(5));
+  const user = useAuthStore((state) => state.user);
+  const { data } = useQuery(categoryQueries.all(user));
 
   function fetchData() {
     console.log(data);
