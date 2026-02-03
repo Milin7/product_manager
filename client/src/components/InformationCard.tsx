@@ -1,4 +1,6 @@
 import { Link } from "@tanstack/react-router";
+import { Button } from "./ui/button";
+import { CirclePlus } from "lucide-react";
 
 interface InformationCardProps {
   title: string;
@@ -22,24 +24,11 @@ export default function InformationCard({
           <p className="text-xl font-semibold">${value}</p>
         </div>
         <div>
-          <button className="p-0.5 rounded-full cursor-pointer bg-black text-white transition-all duration-300 hover:opacity-80">
-            <Link to={link}>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.7}
-                stroke="currentColor"
-                className="w-6 h-6"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M12 4v16m8-8H4"
-                />
-              </svg>
-            </Link>
-          </button>
+          <Link to={link}>
+            <Button variant={"ghost"} size={"icon-sm"} asChild>
+              <CirclePlus />
+            </Button>
+          </Link>
         </div>
       </div>
     </>
