@@ -9,5 +9,6 @@ export async function getCategories(userId: number) {
     return validatedData.data;
   } else {
     console.error(validatedData.error.issues);
+    throw new Error("Failed to validate categories data");
   }
 }
