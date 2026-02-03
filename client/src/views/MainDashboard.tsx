@@ -1,5 +1,8 @@
+import { useQuery } from "@tanstack/react-query";
 import IncomeStatement from "../components/IncomeStatement";
 import InformationCard from "../components/InformationCard";
+import { getCategories } from "../services/CategoryService";
+import { categoryQueries } from "../query/category.queries";
 
 const informationCardConfig = [
   {
@@ -17,6 +20,12 @@ const informationCardConfig = [
 ];
 
 export default function MainDashboard() {
+  const { data } = useQuery(categoryQueries.all(5));
+
+  function fetchData() {
+    console.log(data);
+  }
+  getCategories(5);
   return (
     <div className="grid gap-4 ">
       <div className="flex gap-4 ">
@@ -30,6 +39,7 @@ export default function MainDashboard() {
           />
         ))}
       </div>
+      <button onClick={fetchData}> press here</button>
       <IncomeStatement />
     </div>
   );
