@@ -8,6 +8,9 @@ import EditProduct, {
 } from "./views/EditProduct";
 import { action as deleteProductAction } from "./components/ProductDetails";
 import { action as updateProductAction } from "./views/Products";
+import NewCategory, { action as newCategoryAction } from "./views/NewCategory";
+import MainDashboard from "./views/MainDashboard";
+
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -34,6 +37,21 @@ export const router = createBrowserRouter([
       {
         path: "products/:id/delete",
         action: deleteProductAction,
+      },
+    ],
+  },
+  {
+    path: "/dashboard",
+    element: <Layout />,
+    children: [
+      {
+        index: true,
+        element: <MainDashboard />,
+      },
+      {
+        path: "income/:userId",
+        element: <NewCategory />,
+        action: newCategoryAction,
       },
     ],
   },
