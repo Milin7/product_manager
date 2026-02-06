@@ -30,6 +30,17 @@ export default function MainDashboard() {
         }, 0) || 0
       ).toFixed(2),
     },
+    {
+      title: "Net Balance",
+      description: "Income - Expenses",
+      value: (
+        transactionData?.reduce((acc, curr) => {
+          return curr.type === TransactionType.income
+            ? acc + curr.amount
+            : acc - curr.amount;
+        }, 0) || 0
+      ).toFixed(2),
+    },
   ];
 
   return (
@@ -44,6 +55,7 @@ export default function MainDashboard() {
           />
         ))}
       </div>
+
       <IncomeStatement transactionData={transactionData} />
     </div>
   );

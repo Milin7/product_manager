@@ -32,7 +32,7 @@ export default function InformationCard({
           </div>
         </CardContent>
         <CardFooter>
-          <Modal title={title} />
+          {title != "Net Balance" && <Modal title={title} />}
         </CardFooter>
       </Card>
     </>
