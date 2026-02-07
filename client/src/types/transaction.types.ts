@@ -10,33 +10,26 @@ const TransactionDateSchema = z
 
 export const TransactionSummarySchema = z.object({
   id: z.number(),
-  amount: z.coerce.number().positive(),
+  amount: z.coerce.number(),
+  description: z.string().nullable().optional(),
   type: TransactionTypeSchema,
   transactionDate: TransactionDateSchema,
-  description: z.string().nullable().optional(),
   categoryName: z.string().nullable().optional(),
 });
 
 export const CreateTransactionSchema = z.object({
-  amount: z.coerce.number().positive(),
-  type: TransactionTypeSchema,
+  amount: z.coerce.number(),
   description: z.string().nullable().optional(),
+  type: TransactionTypeSchema,
   transactionDate: TransactionDateSchema,
-  categoryId: z.number(),
+  categoryId: z.number().nullable().optional(),
 });
 
-export const CreatedTransactionSchema = z.object({
-  id: z.number(),
-  amount: z.coerce.number(),
-  type: TransactionTypeSchema,
-  transactionDate: TransactionDateSchema,
-  description: z.string().nullable().optional(),
+const CreateTransactionParams = CreateTransactionSchema.extend({
+  userId: z.number(),
 });
 
 export const TransactionSummaries = z.array(TransactionSummarySchema);
 export type TransactionSummary = z.infer<typeof TransactionSummarySchema>;
-export interface CreateTransactionParams extends CreateTransaction {
-  userId: number;
-}
-type CreateTransaction = z.infer<typeof CreateTransactionSchema>;
+export type CreateTransactionParams = z.infer<typeof CreateTransactionParams>;
 export const TransactionType = TransactionTypeSchema.enum;

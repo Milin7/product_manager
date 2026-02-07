@@ -1,23 +1,15 @@
-import { Modal } from "./Modal";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "./ui/card";
+import { Card, CardDescription, CardHeader, CardTitle } from "./ui/card";
 
 interface InformationCardProps {
   title: string;
   description: string;
-  value: string;
+  children?: React.ReactNode;
 }
 
 export default function InformationCard({
   title,
   description,
-  value,
+  children,
 }: InformationCardProps) {
   return (
     <>
@@ -26,14 +18,7 @@ export default function InformationCard({
           <CardTitle>{title}</CardTitle>
           <CardDescription>{description}</CardDescription>
         </CardHeader>
-        <CardContent>
-          <div className="m-auto text-3xl font-semibold">
-            <p>${value}</p>
-          </div>
-        </CardContent>
-        <CardFooter>
-          <Modal title={title} />
-        </CardFooter>
+        {children}
       </Card>
     </>
   );

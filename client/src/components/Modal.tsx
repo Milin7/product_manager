@@ -9,57 +9,52 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Field, FieldGroup } from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { TransactionType } from "@/types/transaction.types";
+import { FieldGroup } from "./ui/field";
 
 interface ModalProps {
   title: string;
+  description?: string;
+  children: React.ReactNode;
+  handleSubmit: (e: React.SubmitEvent<HTMLFormElement>) => void;
+  handleDescription?: (title: string) => string | undefined;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
 }
 
-export function Modal({ title }: ModalProps) {
-  const handleDescription = (title: string) => {
-    if ((title = TransactionType.income)) {
-      return "Add a new income transaction";
-    } else if ((title = TransactionType.expense)) {
-      return "Add a new expense transaction";
-    }
-  };
-
-  const description = handleDescription(title);
+export function Modal({
+  title,
+  description,
+  children,
+  handleSubmit,
+  handleDescription,
+  open,
+  onOpenChange,
+}: ModalProps) {
   return (
-    <Dialog>
-      <form>
-        <DialogTrigger className="cursor-pointer" asChild>
-          <Button className="w-full">Create {title} transaction</Button>
-        </DialogTrigger>
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogTrigger className="cursor-pointer" asChild>
+        <Button className="w-full">Create {title} transaction</Button>
+      </DialogTrigger>
 
-        <DialogContent className="sm:max-w-sm">
-          <DialogHeader>
+      <DialogContent className="sm:max-w-sm">
+        <form onSubmit={handleSubmit}>
+          <DialogHeader className="mb-4">
             <DialogTitle>{title}</DialogTitle>
-            <DialogDescription>{description}</DialogDescription>
+            <DialogDescription>
+              {handleDescription ? handleDescription(title) : description}
+            </DialogDescription>
           </DialogHeader>
 
-          <FieldGroup>
-            <Field>
-              <Label htmlFor="name-1">Name</Label>
-              <Input id="name-1" name="name" defaultValue="Pedro Duarte" />
-            </Field>
-            <Field>
-              <Label htmlFor="username-1">Username</Label>
-              <Input id="username-1" name="username" defaultValue="@peduarte" />
-            </Field>
-          </FieldGroup>
+          <FieldGroup className="gap-4">{children}</FieldGroup>
 
-          <DialogFooter>
+          <DialogFooter className="mt-4">
+            <Button type="submit">Add {title}</Button>
             <DialogClose asChild>
               <Button variant="outline">Cancel</Button>
             </DialogClose>
-            <Button type="submit">Save changes</Button>
           </DialogFooter>
-        </DialogContent>
-      </form>
+        </form>
+      </DialogContent>
     </Dialog>
   );
 }

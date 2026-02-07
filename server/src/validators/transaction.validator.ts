@@ -24,7 +24,7 @@ export const createTransactionSchema = z.object({
       })
       .transform((val) => new Date(val)),
     description: z.string().optional(),
-    categoryId: z.number().optional(),
+    categoryId: z.number().nullable().optional(),
   }),
   params: z.object({
     userId: z.string().transform(Number),

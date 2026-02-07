@@ -1,7 +1,4 @@
-const navLinks = [
-  { name: "Dashboard", href: "/dashboard" },
-  { name: "Products", href: "/" },
-];
+const navLinks = [{ name: "Dashboard", href: "/" }];
 
 interface LayoutProps {
   children?: React.ReactNode;
